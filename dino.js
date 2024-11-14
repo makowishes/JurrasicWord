@@ -4,6 +4,7 @@ let boardWidth = 750;
 let boardHeight = 250;
 let context;
 
+
 //dino
 let dinoWidth = 88;
 let dinoHeight = 94;
@@ -16,7 +17,7 @@ let dino = {
     y: dinoY,
     width: dinoWidth,
     height: dinoHeight
-}
+};
 
 //cactus
 let cactusArray = [];
@@ -25,11 +26,13 @@ let cactusHeight = 70;
 let cactusX = 700;
 let cactusY = boardHeight - cactusHeight;
 let cactusImg;
+let cactusInterval;
 
 //physics
-let velocityX = -4;
+let velocityX = -4;  // This will now be set based on difficulty in startGame
 let velocityY = 0;
-let gravity = .4;
+let gravity = .5;
+let fallingGravity = 1.3; // Increased gravity for faster descent
 
 let gameOver = false;
 let score = 0;
@@ -42,6 +45,7 @@ let typedWordDisplay;
 let startButton;
 let difficultySelect;
 let readyToJump = false;
+let previousWord = "";
 
 // Difficulty-based dictionaries
 const wordDictionaries = {
@@ -50,7 +54,29 @@ const wordDictionaries = {
     hard: ["dinosaur", "adventure", "challenge", "crocodile", "dangerous", "exercises", "boulevard", "fantastic"]
 };
 
+const difficultySettings = {
+    easy: {
+        speed: -6,
+        jumpVelocity: -11,     // Easier jump timing
+        spawnInterval: 3000,
+        jumpThreshold: 200   // More forgiving distance for jump timing
+    },
+    medium: {
+        speed: -9,
+        jumpVelocity: -11,     // Easier jump timing
+        spawnInterval: 2100,
+        jumpThreshold: 220      // Moderate distance for jump timing
+    },
+    hard: {
+        speed: -11,
+        jumpVelocity: -12,     // Easier jump timing
+        spawnInterval: 2000,
+        jumpThreshold: 220   // Stricter distance for jump timing
+    }
+};
+
 let currentDifficulty = 'easy';
+let animationFrameId;
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -70,7 +96,7 @@ window.onload = function() {
     dinoImg.src = "./img/dino.png";
     dinoImg.onload = function() {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
-    }
+    };
 
     cactusImg = new Image();
     cactusImg.src = "./img/cactus1.png";
@@ -81,46 +107,42 @@ window.onload = function() {
     difficultySelect.addEventListener("change", (e) => {
         currentDifficulty = e.target.value;
     });
-}
+};
 
 function startGame() {
+    // Stop any existing game loops
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+    }
+    clearInterval(cactusInterval);
+
+    // Reset game state
     gameOver = false;
     score = 0;
     cactusArray = [];
     dino.y = dinoY;
     velocityY = 0;
     readyToJump = false;
-    
-    // Set the cactus speed based on difficulty
+
+    // Reset velocity and jump velocity based on current difficulty
     velocityX = difficultySettings[currentDifficulty].speed;
+    dino.jumpVelocity = difficultySettings[currentDifficulty].jumpVelocity;
+    dino.jumpThreshold = difficultySettings[currentDifficulty].jumpThreshold;
 
     startButton.style.display = "none";
     difficultySelect.disabled = true;
     wordInput.value = "";
     wordInput.disabled = false;
     wordInput.focus();
-    
-    requestAnimationFrame(update);
-    setInterval(placeCactus, difficultySettings[currentDifficulty].spawnInterval);
+
+    // Start the game loop and cactus spawn interval
+    animationFrameId = requestAnimationFrame(update);
+    cactusInterval = setInterval(placeCactus, difficultySettings[currentDifficulty].spawnInterval);
     spawnWord();
-    
+
     dinoImg.src = "./img/dino.png";
 }
 
-const difficultySettings = {
-    easy: {
-        speed: -2,
-        spawnInterval: 2500,
-    },
-    medium: {
-        speed: -4,
-        spawnInterval: 2000,
-    },
-    hard: {
-        speed: -6,
-        spawnInterval: 1500,
-    }
-};
 function update() {
     requestAnimationFrame(update);
     if (gameOver) {
@@ -136,14 +158,16 @@ function update() {
     // Handle jumping when word is correctly typed
     if (readyToJump && dino.y === dinoY) {
         let nearestCactus = findNearestCactus();
-        if (nearestCactus && nearestCactus.x <= 200) { 
-            velocityY = -10;
+        
+        if (nearestCactus && nearestCactus.x > dino.x && nearestCactus.x <= dino.jumpThreshold) {
+            // Only jump if the cactus is ahead of the dino and within jump threshold
+            velocityY = dino.jumpVelocity;
             readyToJump = false;
             spawnWord();
         }
     }
 
-    // Update cactuses
+    // Update cactuses with constant speed based on difficulty
     for (let i = 0; i < cactusArray.length; i++) {
         let cactus = cactusArray[i];
         cactus.x += velocityX;
@@ -165,6 +189,7 @@ function update() {
     context.fillText(score, 5, 20);
 }
 
+
 function findNearestCactus() {
     return cactusArray.reduce((nearest, current) => {
         if (!nearest) return current;
@@ -175,7 +200,16 @@ function findNearestCactus() {
 
 function spawnWord() {
     const dictionary = wordDictionaries[currentDifficulty];
-    currentWord = dictionary[Math.floor(Math.random() * dictionary.length)];
+    
+    // Pick a new word that is not the same as the previous one
+    let newWord;
+    do {
+        newWord = dictionary[Math.floor(Math.random() * dictionary.length)];
+    } while (newWord === previousWord);  // Check if the new word is the same as the previous one
+    
+    currentWord = newWord;  // Update the current word
+    previousWord = currentWord;  // Store the current word as the previous word
+
     wordDisplay.innerText = `Type the word: ${currentWord}`;
     wordInput.value = "";
     typedWordDisplay.innerHTML = "";
@@ -215,7 +249,7 @@ function placeCactus() {
         y: cactusY,
         width: cactusWidth,
         height: cactusHeight
-    }
+    };
 
     cactusArray.push(cactus);
 }
@@ -234,4 +268,8 @@ function endGame() {
     typedWordDisplay.innerHTML = "";
     startButton.style.display = "block";
     difficultySelect.disabled = false;
+
+    // Stop the animation loop
+    cancelAnimationFrame(animationFrameId);
+    clearInterval(cactusInterval);
 }
