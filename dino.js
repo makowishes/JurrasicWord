@@ -49,8 +49,22 @@ let previousWord = "";
 
 // Difficulty-based dictionaries
 const wordDictionaries = {
-    easy: ["cat", "dog", "run", "jump", "play", "fun", "top", "mix", "red", "blue"],
-    medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon"],
+    easy: ["cat", "dog", "run", "jump", "play", "fun", "top", "mix", "red", "blue", "mud", "calm", "see", "eat", "day", "arm", "bomb", "bird", "ace", "ski",
+          "ink", "pit", "cod", "bud", "boss", "any", "den", "ask", "aim", "odd", "sky", "bag", "win", "sit", "fig", "jog", "boy", "bus", "lot", "sin", "pan", 
+          "bar", "cab", "end", "bad", "art", "jam", "oil", "rob", "lap", "con", "fit", "lap", "hen", "yes", "wig", "toy", "guy", "had", "toe", "sad", "let",
+          "off", "rub", "max", "rib", "rip", "bum", "boo", "low", "two", "fog", "ten", "dry", "gym", "web", "mad", "hug", "new", "ram", "lab", "bat", "joy",
+          "sea", "dye", "bee", "awe", "pet", "ant", "act", "ash", "dub", "old", "mug", "pen", "pad", "bow", "hit", "jaw", "fat", "own", "mat", "hop", "air",
+          "fix", "zip", "fox", "bay", "cap", "tap", "buy", "big", "bed", "dug", "era", "may", "wag", "car", "cry", "sun", "box", "lip", "net", "all", "gas",
+          "war", "ban", "kid", "his", "vet", "men", "peg", "bin", "foam", "rush", "hand", "belt", "glow", "wild", "cape", "bold", "gaze", "leaf", "flow", "desk",
+          "hunt", "bear", "dark", "cook", "gold", "king", "boat", "wish", "roof", "ring", "card", "dust", "grid", "fire", "wave", "farm", "path", "bend", "dive",
+          "join", "book", "ball", "twin", "bark", "drop", "plan", "sink", "spin", "land", "warm", "lamp", "pure", "tone", "sand", "back", "face", "wolf", "gift",
+          "code", "snow", "rise", "good", "firm", "lock", "wrap", "open", "bank", "pair", "fort", "ring", "arch", "dust", "peak", "time", "save", "view", "foam",
+          "quest", "shady", "blaze", "crisp", "curve", "flash", "gloom", "flour", "bound", "arrow", "frost", "chest", "brisk", "grasp", "spark", "sweep", "crown",
+          "fancy", "flush", "ghost", "slide", "twist", "patch", "drift", "space", "chase", "track", "stone", "maple", "crave", "mount", "break", "charm", "grain",
+          "trace", "stamp", "range", "bloom", "brush", "clear", "limit", "fault", "field", "prize", "level", "scale", "shine", "spare", "swing", "craft", "brave",
+          "claim", "speed", "start", "blast", "fresh", spade", "tight", "storm", "march", "smart", "forge", "booth", "coast", "flock", "steam", "blink", "roast",
+          "taste", "clasp", "climb", "coast", "crept", "swift", "round", "steel", "snare", "stack", "chalk", "greet", "fruit", "stand", "catch", "freak", "grown"],
+    medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon", "marvel", "fabric", "whisper", "puzzle", "timber"],
     hard: ["dinosaur", "adventure", "challenge", "crocodile", "dangerous", "exercises", "boulevard", "fantastic"]
 };
 
