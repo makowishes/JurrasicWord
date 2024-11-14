@@ -64,7 +64,21 @@ const wordDictionaries = {
           "trace", "stamp", "range", "bloom", "brush", "clear", "limit", "fault", "field", "prize", "level", "scale", "shine", "spare", "swing", "craft", "brave",
           "claim", "speed", "start", "blast", "fresh", spade", "tight", "storm", "march", "smart", "forge", "booth", "coast", "flock", "steam", "blink", "roast",
           "taste", "clasp", "climb", "coast", "crept", "swift", "round", "steel", "snare", "stack", "chalk", "greet", "fruit", "stand", "catch", "freak", "grown"],
-    medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon", "marvel", "fabric", "whisper", "puzzle", "timber"],
+    medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon", "marvel", "fabric", "whisper", "puzzle", "timber",
+            "bridge", "canvas", "forest", "summit", "spiral", "accent", "random", "gather", "hustle", "bright", "frosty", "castle", "extend", "corner", "travel",
+            "linear", "frozen", "filter", "secure", "beacon", "remark", "sprint", "bamboo", "radius", "garage", "wonder", "branch", "detail", "access", "daring",
+            "grocer", "smooth", "relate", "unique", "sparkle", "enlist", "silver", "banner", "custom", "finish", "sculpt", "volume", "market", "native", "spirit",
+            "impact", "extend", "legend", "object", "forget", "accent", "button", "window", "border", "jungle", "clever", "strike", "launch", "wisely", "rescue",
+            "spring", "vessel", "method", "sector", "tunnel", "remind", "remark", "vision", "dancer", "hidden", "invent", "grassy", "purple", "sample", "anchor",
+            "friend", "wealth", "simple", "breeze", "remote", "finish", "income", "arctic", "motion", "silent", "shield", "garble", "vendor", "export", "target",
+            "sphere", "plunge", "orange", "fusion", "figure", "safari", "narrow", "exotic", "matter", "repair", "modest", "weight", "empire", "almost", "layout",
+            "lantern", "capture", "mystery", "fortune", "journey", "radiant", "harmony", "victory", "publish", "delight", "radical", "blanket", "freedom",
+            "context", "beneath", "platter", "harvest", "divine", "magnify", "picture", "station", "triumph", "enlarge", "theater", "venture", "orbit", "courage",
+            "channel", "liberty", "lighter", "ecology", "fantail", "therapy", "convert", "ancient", "shimmer", "message", "canteen", "limited", "fantasy",
+            "justice", "hurdles", "passage", "apparel", "miracle", "horizon", "chimney", "elastic", "crystal", "resolve", "science", "purpose", "biology",
+            "project", "skyline", "absence", "network", "disease", "process", "concept", "balance", "abandon", "organic", "diamond", "villain", "affable",
+            "balloon", "texture", "margins", "drought", "calling", "physics", "teacher", "crumble", "various", "support", "absolve", "drifted", "enriches",
+            "forgot", "grouper", "clipped", "healthy", "regroup", "plaster", "wander", "plastic", "teeming", "rotate", "distant", "knitted", "rebelled", "request"],
     hard: ["dinosaur", "adventure", "challenge", "crocodile", "dangerous", "exercises", "boulevard", "fantastic"]
 };
 
