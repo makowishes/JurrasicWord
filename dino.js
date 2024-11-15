@@ -62,7 +62,7 @@ const wordDictionaries = {
           "quest", "shady", "blaze", "crisp", "curve", "flash", "gloom", "flour", "bound", "arrow", "frost", "chest", "brisk", "grasp", "spark", "sweep", "crown",
           "fancy", "flush", "ghost", "slide", "twist", "patch", "drift", "space", "chase", "track", "stone", "maple", "crave", "mount", "break", "charm", "grain",
           "trace", "stamp", "range", "bloom", "brush", "clear", "limit", "fault", "field", "prize", "level", "scale", "shine", "spare", "swing", "craft", "brave",
-          "claim", "speed", "start", "blast", "fresh", spade", "tight", "storm", "march", "smart", "forge", "booth", "coast", "flock", "steam", "blink", "roast",
+          "claim", "speed", "start", "blast", "fresh", "spade", "tight", "storm", "march", "smart", "forge", "booth", "coast", "flock", "steam", "blink", "roast",
           "taste", "clasp", "climb", "coast", "crept", "swift", "round", "steel", "snare", "stack", "chalk", "greet", "fruit", "stand", "catch", "freak", "grown",
           "equip", "agree", "value", "class", "check"],
     medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon", "marvel", "fabric", "whisper", "puzzle", "timber",
