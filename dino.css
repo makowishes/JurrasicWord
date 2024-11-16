@@ -6,7 +6,7 @@ body {
 }
 
 #board {
-    background-image: url('titleBackground.png');
+    background-image: url('assets/titleBackground.png');
     background-size: cover;    
     border: 1px solid black;
     margin-bottom: 10px;
