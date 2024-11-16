@@ -1,0 +1,32 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background: linear-gradient(#99c7e2, #689580);
+    background-attachment: fixed;
+}
+
+#board {
+    background-image: url('assets/titleBackground.png');
+    background-size: cover;    
+    border: 1px solid black;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#word-display, #typed-word-display {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#word-input {
+    font-size: 18px;
+    padding: 5px;
+}
+
+.correct-letter {
+    color: green;
+}
+
+.incorrect-letter {
+    color: red;
+}
