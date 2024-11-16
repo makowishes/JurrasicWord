@@ -1,14 +1,16 @@
 body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
+    background: linear-gradient(#99c7e2, #689580, #6e3032);
+    background-attachment: fixed;
 }
 
 #board {
-    background-color: lightgray;
+    background-image: url('titleBackground.png');
+    background-size: cover;    
     border: 1px solid black;
     margin-bottom: 10px;
-    width: 750px;
-    height: 250px;
+    width: 100%;
 }
 
 #word-display, #typed-word-display {
