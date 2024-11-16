@@ -173,11 +173,12 @@ function startGame() {
     velocityY = 0;
     readyToJump = false;
 
-    // Reset velocity and jump velocity based on current difficulty
+    // Reset velocity and jump settings based on current difficulty
     velocityX = difficultySettings[currentDifficulty].speed;
     dino.jumpVelocity = difficultySettings[currentDifficulty].jumpVelocity;
     dino.jumpThreshold = difficultySettings[currentDifficulty].jumpThreshold;
 
+    // Reset UI elements
     startButton.style.display = "none";
     difficultySelect.disabled = true;
     wordInput.value = "";
@@ -193,21 +194,24 @@ function startGame() {
 }
 
 function update() {
-    requestAnimationFrame(update);
+    // Set the animation frame ID each time `update` is called
+    animationFrameId = requestAnimationFrame(update);
+
     if (gameOver) {
         return;
     }
+
     context.clearRect(0, 0, board.width, board.height);
 
-    // Update dino
+    // Apply gravity and move the dino based on the calculated velocityY
     velocityY += gravity;
     dino.y = Math.min(dino.y + velocityY, dinoY);
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
 
-    // Handle jumping when word is correctly typed
+    // Handle jumping when the word is correctly typed
     if (readyToJump && dino.y === dinoY) {
         let nearestCactus = findNearestCactus();
-        
+            
         if (nearestCactus && nearestCactus.x > dino.x && nearestCactus.x <= dino.jumpThreshold) {
             // Only jump if the cactus is ahead of the dino and within jump threshold
             velocityY = dino.jumpVelocity;
@@ -216,10 +220,10 @@ function update() {
         }
     }
 
-    // Update cactuses with constant speed based on difficulty
+    // Update cactus positions and draw them
     for (let i = 0; i < cactusArray.length; i++) {
         let cactus = cactusArray[i];
-        cactus.x += velocityX;
+        cactus.x += velocityX;  // Use the cactus speed from the difficulty settings
         context.drawImage(cactusImg, cactus.x, cactus.y, cactusWidth, cactusHeight);
 
         if (detectCollision(dino, cactus)) {
@@ -229,7 +233,7 @@ function update() {
         }
     }
 
-    // Clean up off-screen cactuses
+    // Remove off-screen cactuses
     cactusArray = cactusArray.filter(cactus => cactus.x > -cactusWidth);
 
     // Draw score
@@ -237,6 +241,7 @@ function update() {
     context.font = "20px courier";
     context.fillText(score, 5, 20);
 }
+
 
 
 function findNearestCactus() {
