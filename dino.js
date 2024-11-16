@@ -9,7 +9,7 @@ let context;
 let dinoWidth = 88;
 let dinoHeight = 94;
 let dinoX = 50;
-let dinoY = boardHeight - dinoHeight;
+let dinoY = boardHeight - dinoHeight - 25;
 let dinoImg;
 
 let dino = {
@@ -19,14 +19,14 @@ let dino = {
     height: dinoHeight
 };
 
-//cactus
-let cactusArray = [];
-let cactusWidth = 34;  // Using only the small cactus
-let cactusHeight = 70;
-let cactusX = 700;
-let cactusY = boardHeight - cactusHeight;
-let cactusImg;
-let cactusInterval;
+//rock
+let rockArray = [];
+let rockWidth = 34;  // Using only the small rock
+let rockHeight = 70;
+let rockX = 700;
+let rockY = boardHeight - rockHeight - 25;
+let rockImg;
+let rockInterval;
 
 //physics
 let velocityX = -4;  // This will now be set based on difficulty in startGame
@@ -147,8 +147,8 @@ window.onload = function() {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
     };
 
-    cactusImg = new Image();
-    cactusImg.src = "./img/cactus1.png";
+    rockImg = new Image();
+    rockImg.src = "./img/rock.png";
 
     // Add event listeners
     wordInput.addEventListener("input", handleTyping);
@@ -163,78 +163,74 @@ function startGame() {
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
     }
-    clearInterval(cactusInterval);
+    clearInterval(rockInterval);
 
     // Reset game state
     gameOver = false;
     score = 0;
-    cactusArray = [];
+    rockArray = [];
     dino.y = dinoY;
     velocityY = 0;
     readyToJump = false;
 
-    // Reset velocity and jump settings based on current difficulty
+    // Reset velocity and jump velocity based on current difficulty
     velocityX = difficultySettings[currentDifficulty].speed;
     dino.jumpVelocity = difficultySettings[currentDifficulty].jumpVelocity;
     dino.jumpThreshold = difficultySettings[currentDifficulty].jumpThreshold;
 
-    // Reset UI elements
     startButton.style.display = "none";
     difficultySelect.disabled = true;
     wordInput.value = "";
     wordInput.disabled = false;
     wordInput.focus();
 
-    // Start the game loop and cactus spawn interval
+    // Start the game loop and rock spawn interval
     animationFrameId = requestAnimationFrame(update);
-    cactusInterval = setInterval(placeCactus, difficultySettings[currentDifficulty].spawnInterval);
+    rockInterval = setInterval(placeRock, difficultySettings[currentDifficulty].spawnInterval);
     spawnWord();
 
     dinoImg.src = "./img/dino.png";
 }
 
 function update() {
-    // Set the animation frame ID each time `update` is called
     animationFrameId = requestAnimationFrame(update);
-
     if (gameOver) {
         return;
     }
-
     context.clearRect(0, 0, board.width, board.height);
 
-    // Apply gravity and move the dino based on the calculated velocityY
+    // Update dino
     velocityY += gravity;
     dino.y = Math.min(dino.y + velocityY, dinoY);
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
 
-    // Handle jumping when the word is correctly typed
+    // Handle jumping when word is correctly typed
     if (readyToJump && dino.y === dinoY) {
-        let nearestCactus = findNearestCactus();
-            
-        if (nearestCactus && nearestCactus.x > dino.x && nearestCactus.x <= dino.jumpThreshold) {
-            // Only jump if the cactus is ahead of the dino and within jump threshold
+        let nearestRock = findNearestRock();
+        
+        if (nearestRock && nearestRock.x > dino.x && nearestRock.x <= dino.jumpThreshold) {
+            // Only jump if the rock is ahead of the dino and within jump threshold
             velocityY = dino.jumpVelocity;
             readyToJump = false;
             spawnWord();
         }
     }
 
-    // Update cactus positions and draw them
-    for (let i = 0; i < cactusArray.length; i++) {
-        let cactus = cactusArray[i];
-        cactus.x += velocityX;  // Use the cactus speed from the difficulty settings
-        context.drawImage(cactusImg, cactus.x, cactus.y, cactusWidth, cactusHeight);
+    // Update rockes with constant speed based on difficulty
+    for (let i = 0; i < rockArray.length; i++) {
+        let rock = rockArray[i];
+        rock.x += velocityX;
+        context.drawImage(rockImg, rock.x, rock.y, rockWidth, rockHeight);
 
-        if (detectCollision(dino, cactus)) {
+        if (detectCollision(dino, rock)) {
             gameOver = true;
-            dinoImg.src = "./img/dino-dead.png";
+            dinoImg.src = "./img/dino.png";
             endGame();
         }
     }
 
-    // Remove off-screen cactuses
-    cactusArray = cactusArray.filter(cactus => cactus.x > -cactusWidth);
+    // Clean up off-screen rockes
+    rockArray = rockArray.filter(rock => rock.x > -rockWidth);
 
     // Draw score
     context.fillStyle = "black";
@@ -243,9 +239,8 @@ function update() {
 }
 
 
-
-function findNearestCactus() {
-    return cactusArray.reduce((nearest, current) => {
+function findNearestRock() {
+    return rockArray.reduce((nearest, current) => {
         if (!nearest) return current;
         if (current.x < nearest.x && current.x > dino.x) return current;
         return nearest;
@@ -293,19 +288,19 @@ function handleTyping() {
     }
 }
 
-function placeCactus() {
+function placeRock() {
     if (gameOver) {
         return;
     }
 
-    let cactus = {
-        x: cactusX,
-        y: cactusY,
-        width: cactusWidth,
-        height: cactusHeight
+    let rock = {
+        x: rockX,
+        y: rockY,
+        width: rockWidth,
+        height: rockHeight
     };
 
-    cactusArray.push(cactus);
+    rockArray.push(rock);
 }
 
 function detectCollision(a, b) {
@@ -325,5 +320,5 @@ function endGame() {
 
     // Stop the animation loop
     cancelAnimationFrame(animationFrameId);
-    clearInterval(cactusInterval);
+    clearInterval(rockInterval);
 }
