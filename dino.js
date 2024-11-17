@@ -193,7 +193,7 @@ function startGame() {
 }
 
 function update() {
-    requestAnimationFrame(update);
+    animationFrameId = requestAnimationFrame(update);
     if (gameOver) {
         return;
     }
@@ -224,7 +224,7 @@ function update() {
 
         if (detectCollision(dino, rock)) {
             gameOver = true;
-            dinoImg.src = "./img/dino-dead.png";
+            dinoImg.src = "./img/dino.png";
             endGame();
         }
     }
