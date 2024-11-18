@@ -6,12 +6,8 @@ body {
     color: #333;
 }
 
-#title{
-    margin-top: 10px;
-}
-
 #board {
-    background-image: url('assets/background.png');
+    background-image: url('assets/titleBackground.png');
     background-size: cover;    
     border: 3px solid #333;
     border-radius: 10px;
