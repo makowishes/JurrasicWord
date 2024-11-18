@@ -4,6 +4,12 @@ let boardWidth = 750;
 let boardHeight = 250;
 let context;
 
+backgroundMusic = new Audio('./assets/music/theme1.mp3');
+gameOverSound = new Audio('./assets/music/game-over.wav');
+jumpSound = new Audio('./assets/music/jump.wav');
+
+gameOverSign = new Image();
+gameOverSign.src = "./img/game-over.gif";
 
 //dino
 let dinoWidth = 88;
@@ -21,8 +27,8 @@ let dino = {
 
 //rock
 let rockArray = [];
-let rockWidth = 34;  // Using only the small rock
-let rockHeight = 70;
+let rockWidth = 50;  // Using only the small rock
+let rockHeight = 50;
 let rockX = 700;
 let rockY = boardHeight - rockHeight - 25;
 let rockImg;
@@ -65,6 +71,7 @@ const wordDictionaries = {
           "claim", "speed", "start", "blast", "fresh", "spade", "tight", "storm", "march", "smart", "forge", "booth", "coast", "flock", "steam", "blink", "roast",
           "taste", "clasp", "climb", "coast", "crept", "swift", "round", "steel", "snare", "stack", "chalk", "greet", "fruit", "stand", "catch", "freak", "grown",
           "equip", "agree", "value", "class", "check"],
+
     medium: ["cactus", "desert", "typing", "gaming", "running", "player", "faster", "higher", "dragon", "marvel", "fabric", "whisper", "puzzle", "timber",
             "bridge", "canvas", "forest", "summit", "spiral", "accent", "random", "gather", "hustle", "bright", "frosty", "castle", "extend", "corner", "travel",
             "linear", "frozen", "filter", "secure", "beacon", "remark", "sprint", "bamboo", "radius", "garage", "wonder", "branch", "detail", "access", "daring",
@@ -83,6 +90,7 @@ const wordDictionaries = {
             "glimmer", "fidget", "sturdy", "breath", "thanks", "seeker", "topping", "wasted", "online", "create", "spoiled", "studio", "hunter", "longer",
             "safety", "enjoyed", "result", "melody", "hunting", "compare", "improve", "compute", "expose", "govern", "ensure", "author", "promote", "finance",
             "include", "compete", "recycle", "diverse", "record", "develop", "direct", "provide", "invest"],
+
     hard: ["dinosaur", "adventure", "challenge", "crocodile", "dangerous", "exercises", "boulevard", "fantastic", "absolute", "backyard", "creative", "notebook",
           "strategy", "delegate", "fountain", "coverage", "villager", "complain", "blueprint", "skeleton", "optimize", "building", "cautious", "guardian",
           "mountain", "learning", "knowledge", "decision", "relation", "circular", "delivered", "analysis", "identity", "tomorrow", "vineyard", "supplier",
@@ -96,30 +104,55 @@ const wordDictionaries = {
           "unlimited", "triangle", "structure", "president", "landscape", "resident", "countdown", "equipment", "agreement", "character", "detailing",
           "governing", "organized", "prototype", "discovery", "influence", "procedure", "education", "connected", "available", "awareness", "tolerance",
           "selection", "operation", "attention", "reference", "direction", "describe", "insurance", "principal", "emphasize", "strength", "authority", "promotion",
-          "financing", "including", "volunteer", "marketing", "valuation", "situation", "residence", "integrity", "interview", "signature", "portfolio",
+          "financing", "including", "volunteer", "marketing", "evaluation", "situation", "residence", "integrity", "interview", "signature", "portfolio",
           "happiness", "gorgeous", "reporting", "institute", "complete", "lightning", "recycling", "placement", "associate", "exposure", "classroom", "continue",
           "diversity", "complaint", "invention", "mechanism", "together", "surprise", "revision", "mechanics", "relative", "specific", "recording", "organizer",
           "analyzing", "educating", "developer", "frequency", "forecast", "sociology", "checking", "discover", "velocity", "investing", "attached", "question",
-          "completed", "duration", "recovery", "achieving", "lifelong", "exercise", "database", "advancing", "resource", "deletion", "lifeline", "location"]
+          "completed", "duration", "recovery", "achieving", "lifelong", "exercise", "database", "advancing", "resource", "deletion", "lifeline", "location"],
+
+    extreme: ["dinosaur", "adventure", "challenge", "crocodile", "dangerous", "exercises", "boulevard", "fantastic", "absolute", "backyard", "creative", "notebook",
+            "strategy", "delegate", "fountain", "coverage", "villager", "complain", "blueprint", "skeleton", "optimize", "building", "cautious", "guardian",
+            "mountain", "learning", "knowledge", "decision", "relation", "circular", "delivered", "analysis", "identity", "tomorrow", "vineyard", "supplier",
+            "informer", "national", "software", "designer", "division", "declared", "possible", "property", "security", "provider", "consumer", "hospital",
+            "timeline", "industry", "solution", "heritage", "personal", "laughter", "dialogue", "friction", "wildlife", "majority", "obstacle", "pursuing",
+            "existing", "movement", "children", "elephant", "composer", "suitable", "campaign", "festival", "outbreak", "planning", "creation", "generate",
+            "platform", "customer", "organize", "operator", "training", "advocate", "required", "disclose", "outgoing", "standard", "research", "monument",
+            "register", "particle", "corridor", "keyboard", "disagree", "portrait", "template", "magazine", "elevator", "contrast", "emphasis", "addition",
+            "boundary", "vacation", "approach", "alliance", "economic", "flexible", "backyard", "occasion", "workshop", "presence", "position", "portable",
+            "elevates", "spectrum", "brilliant", "conflict", "painting", "shipping", "listings", "confused", "assembly", "computer", "official", "follower",
+            "unlimited", "triangle", "structure", "president", "landscape", "resident", "countdown", "equipment", "agreement", "character", "detailing",
+            "governing", "organized", "prototype", "discovery", "influence", "procedure", "education", "connected", "available", "awareness", "tolerance",
+            "selection", "operation", "attention", "reference", "direction", "describe", "insurance", "principal", "emphasize", "strength", "authority", "promotion",
+            "financing", "including", "volunteer", "marketing", "evaluation", "situation", "residence", "integrity", "interview", "signature", "portfolio",
+            "happiness", "gorgeous", "reporting", "institute", "complete", "lightning", "recycling", "placement", "associate", "exposure", "classroom", "continue",
+            "diversity", "complaint", "invention", "mechanism", "together", "surprise", "revision", "mechanics", "relative", "specific", "recording", "organizer",
+            "analyzing", "educating", "developer", "frequency", "forecast", "sociology", "checking", "discover", "velocity", "investing", "attached", "question",
+            "completed", "duration", "recovery", "achieving", "lifelong", "exercise", "database", "advancing", "resource", "deletion", "lifeline", "location"]
 };
 
 const difficultySettings = {
     easy: {
-        speed: -6,
-        jumpVelocity: -11,     // Easier jump timing
-        spawnInterval: 3000,
-        jumpThreshold: 200   // More forgiving distance for jump timing
+        speed: -4,
+        jumpVelocity: -11.5,     // Easier jump timing
+        spawnInterval: 2200,
+        jumpThreshold: 170   // More forgiving distance for jump timing
     },
     medium: {
-        speed: -9,
-        jumpVelocity: -11,     // Easier jump timing
+        speed: -5.5,
+        jumpVelocity: -12,     // Easier jump timing
         spawnInterval: 2100,
         jumpThreshold: 220      // Moderate distance for jump timing
     },
     hard: {
-        speed: -11,
+        speed: -6.0,
         jumpVelocity: -12,     // Easier jump timing
-        spawnInterval: 1900,
+        spawnInterval: 1750,
+        jumpThreshold: 220   // Stricter distance for jump timing
+    },
+    extreme: {
+        speed: -15.5,
+        jumpVelocity: -12,     // Easier jump timing
+        spawnInterval: 1500,
         jumpThreshold: 220   // Stricter distance for jump timing
     }
 };
@@ -164,6 +197,26 @@ function startGame() {
         cancelAnimationFrame(animationFrameId);
     }
     clearInterval(rockInterval);
+
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+
+    // Load the appropriate music theme based on difficulty
+    if (currentDifficulty === 'easy') {
+        backgroundMusic = new Audio('./assets/music/theme1.mp3');
+    } else if (currentDifficulty === 'medium') {
+        backgroundMusic = new Audio('./assets/music/theme2.mp3');
+    } else if (currentDifficulty === 'hard' || currentDifficulty === 'extreme') {
+        backgroundMusic = new Audio('./assets/music/theme3.mp3');
+    }
+
+    // Configure and play the music
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5;
+    
+    backgroundMusic.play();
 
     // Reset game state
     gameOver = false;
@@ -210,6 +263,7 @@ function update() {
     // Handle jumping when word is correctly typed
     if (readyToJump && dino.y === dinoY) {
         let nearestRock = findNearestRock();
+        jumpSound.play();
         
         if (nearestRock && nearestRock.x > dino.x && nearestRock.x <= dino.jumpThreshold) {
             // Only jump if the rock is ahead of the dino and within jump threshold
@@ -227,7 +281,7 @@ function update() {
 
         if (detectCollision(dino, rock)) {
             gameOver = true;
-            dinoImg.src = "./img/dino.png";
+            dinoImg.src = "./img/dino-dead.png";
             endGame();
         }
     }
@@ -318,6 +372,15 @@ function detectCollision(a, b) {
 }
 
 function endGame() {
+    if (backgroundMusic) {
+        backgroundMusic.pause(); // Pause the music
+        backgroundMusic.currentTime = 0; // Reset playback to the start
+    }
+    gameOverSound.play();
+
+    gameOverSign.onload = function() {
+        context.drawImage(gameOverSign, 200, 425, 200, 200);
+    };
     gameOver = true;
     wordDisplay.innerText = "Game Over!";
     wordInput.disabled = true;
