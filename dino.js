@@ -4,12 +4,18 @@ let boardWidth = 750;
 let boardHeight = 250;
 let context;
 
+backgroundMusic = new Audio('./assets/music/theme1.mp3');
+gameOverSound = new Audio('./assets/music/game-over.wav');
+jumpSound = new Audio('./assets/music/jump.wav');
+
+gameOverSign = new Image();
+gameOverSign.src = "./assets/img/game-over.gif";
 
 //dino
 let dinoWidth = 88;
 let dinoHeight = 94;
 let dinoX = 50;
-let dinoY = boardHeight - dinoHeight;
+let dinoY = boardHeight - dinoHeight - 25;
 let dinoImg;
 
 let dino = {
@@ -19,14 +25,14 @@ let dino = {
     height: dinoHeight
 };
 
-//cactus
-let cactusArray = [];
-let cactusWidth = 34;  // Using only the small cactus
-let cactusHeight = 70;
-let cactusX = 700;
-let cactusY = boardHeight - cactusHeight;
-let cactusImg;
-let cactusInterval;
+//rock
+let rockArray = [];
+let rockWidth = 50;  // Using only the small rock
+let rockHeight = 50;
+let rockX = 700;
+let rockY = boardHeight - rockHeight - 25;
+let rockImg;
+let rockInterval;
 
 //physics
 let velocityX = -4;  // This will now be set based on difficulty in startGame
@@ -142,13 +148,13 @@ window.onload = function() {
     difficultySelect = document.getElementById("difficulty-select");
 
     dinoImg = new Image();
-    dinoImg.src = "./img/dino.png";
+    dinoImg.src = "./assets/img/dino.png";
     dinoImg.onload = function() {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
     };
 
-    cactusImg = new Image();
-    cactusImg.src = "./img/cactus1.png";
+    rockImg = new Image();
+    rockImg.src = "./assets/img/rock.png";
 
     // Add event listeners
     wordInput.addEventListener("input", handleTyping);
@@ -163,12 +169,27 @@ function startGame() {
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
     }
-    clearInterval(cactusInterval);
+    clearInterval(rockInterval);
+
+    if(!backgroundMusic) {
+        if(currentDifficulty == 'easy'){
+            backgroundMusic = new Audio('./assets/music/theme1.mp3');
+        }
+        else if(currentDifficulty == 'medium'){
+            backgroundMusic = new Audio('./assets/music/theme2.mp3');
+        }
+        else if(currentDifficulty == 'hard'){
+            backgroundMusic = new Audio('./assets/music/theme3.mp3');
+        }
+        backgroundMusic.loop = true;  // Loop the music
+        backgroundMusic.volume = 0.5; 
+    }
+    backgroundMusic.play();
 
     // Reset game state
     gameOver = false;
     score = 0;
-    cactusArray = [];
+    rockArray = [];
     dino.y = dinoY;
     velocityY = 0;
     readyToJump = false;
@@ -184,16 +205,16 @@ function startGame() {
     wordInput.disabled = false;
     wordInput.focus();
 
-    // Start the game loop and cactus spawn interval
+    // Start the game loop and rock spawn interval
     animationFrameId = requestAnimationFrame(update);
-    cactusInterval = setInterval(placeCactus, difficultySettings[currentDifficulty].spawnInterval);
+    rockInterval = setInterval(placeRock, difficultySettings[currentDifficulty].spawnInterval);
     spawnWord();
 
-    dinoImg.src = "./img/dino.png";
+    dinoImg.src = "./assets/img/dino.png";
 }
 
 function update() {
-    requestAnimationFrame(update);
+    animationFrameId = requestAnimationFrame(update);
     if (gameOver) {
         return;
     }
@@ -206,31 +227,32 @@ function update() {
 
     // Handle jumping when word is correctly typed
     if (readyToJump && dino.y === dinoY) {
-        let nearestCactus = findNearestCactus();
+        let nearestRock = findNearestRock();
+        jumpSound.play();
         
-        if (nearestCactus && nearestCactus.x > dino.x && nearestCactus.x <= dino.jumpThreshold) {
-            // Only jump if the cactus is ahead of the dino and within jump threshold
+        if (nearestRock && nearestRock.x > dino.x && nearestRock.x <= dino.jumpThreshold) {
+            // Only jump if the rock is ahead of the dino and within jump threshold
             velocityY = dino.jumpVelocity;
             readyToJump = false;
             spawnWord();
         }
     }
 
-    // Update cactuses with constant speed based on difficulty
-    for (let i = 0; i < cactusArray.length; i++) {
-        let cactus = cactusArray[i];
-        cactus.x += velocityX;
-        context.drawImage(cactusImg, cactus.x, cactus.y, cactusWidth, cactusHeight);
+    // Update rockes with constant speed based on difficulty
+    for (let i = 0; i < rockArray.length; i++) {
+        let rock = rockArray[i];
+        rock.x += velocityX;
+        context.drawImage(rockImg, rock.x, rock.y, rockWidth, rockHeight);
 
-        if (detectCollision(dino, cactus)) {
+        if (detectCollision(dino, rock)) {
             gameOver = true;
-            dinoImg.src = "./img/dino-dead.png";
+            dinoImg.src = "./assets/img/dino-dead.png";
             endGame();
         }
     }
 
-    // Clean up off-screen cactuses
-    cactusArray = cactusArray.filter(cactus => cactus.x > -cactusWidth);
+    // Clean up off-screen rockes
+    rockArray = rockArray.filter(rock => rock.x > -rockWidth);
 
     // Draw score
     context.fillStyle = "black";
@@ -239,8 +261,8 @@ function update() {
 }
 
 
-function findNearestCactus() {
-    return cactusArray.reduce((nearest, current) => {
+function findNearestRock() {
+    return rockArray.reduce((nearest, current) => {
         if (!nearest) return current;
         if (current.x < nearest.x && current.x > dino.x) return current;
         return nearest;
@@ -288,19 +310,19 @@ function handleTyping() {
     }
 }
 
-function placeCactus() {
+function placeRock() {
     if (gameOver) {
         return;
     }
 
-    let cactus = {
-        x: cactusX,
-        y: cactusY,
-        width: cactusWidth,
-        height: cactusHeight
+    let rock = {
+        x: rockX,
+        y: rockY,
+        width: rockWidth,
+        height: rockHeight
     };
 
-    cactusArray.push(cactus);
+    rockArray.push(rock);
 }
 
 function detectCollision(a, b) {
@@ -311,6 +333,17 @@ function detectCollision(a, b) {
 }
 
 function endGame() {
+    if (backgroundMusic) {
+        backgroundMusic.pause(); // Pause the music
+        backgroundMusic.currentTime = 0; // Reset playback to the start
+    }
+    gameOverSound.play();
+
+    gameOverSign.onload = function() {
+        context.drawImage(gameOverSign, 200, 425, 200, 200);
+    };
+
+
     gameOver = true;
     wordDisplay.innerText = "Game Over! Click 'Start Game' to play again.";
     wordInput.disabled = true;
@@ -320,5 +353,5 @@ function endGame() {
 
     // Stop the animation loop
     cancelAnimationFrame(animationFrameId);
-    clearInterval(cactusInterval);
+    clearInterval(rockInterval);
 }
