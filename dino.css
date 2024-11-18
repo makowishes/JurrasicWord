@@ -11,7 +11,7 @@ body {
 }
 
 #board {
-    background-image: url('assets/titleBackground.png');
+    background-image: url('assets/background.png');
     background-size: cover;    
     border: 3px solid #333;
     border-radius: 10px;
