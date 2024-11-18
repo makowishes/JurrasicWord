@@ -5,19 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurrasic Word</title>
     <link rel="stylesheet" href="dino.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="title"><img src="assets/title.png"></div>
     <canvas id="board"></canvas>
     <div id="word-display">Press Start to begin!</div>
-    <div id="typed-word-display"></div>
-    <select id="difficulty-select">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-    </select>
-    <input type="text" id="word-input" placeholder="Type the word..." disabled />
-    <button id="start-button">Start Game</button>
+    <div class="game-controls">
+        <div id="typed-word-display"></div>
+        <input type="text" id="word-input" placeholder="Type the word..." disabled />
+    </div>
+    <div id="controls-container">
+        <select id="difficulty-select">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+        <button id="start-button" class="retro-button">START GAME</button>
+    </div>
     <script src="dino.js"></script>
 </body>
 </html>
