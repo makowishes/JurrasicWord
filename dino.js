@@ -119,7 +119,7 @@ const difficultySettings = {
     hard: {
         speed: -11,
         jumpVelocity: -12,     // Easier jump timing
-        spawnInterval: 2000,
+        spawnInterval: 1900,
         jumpThreshold: 220   // Stricter distance for jump timing
     }
 };
@@ -179,7 +179,7 @@ function startGame() {
     dino.jumpThreshold = difficultySettings[currentDifficulty].jumpThreshold;
 
     startButton.style.display = "none";
-    difficultySelect.disabled = true;
+    difficultySelect.style.display = "none";
     wordInput.value = "";
     wordInput.disabled = false;
     wordInput.focus();
@@ -190,6 +190,9 @@ function startGame() {
     spawnWord();
 
     dinoImg.src = "./img/dino.png";
+    if (startButton.textContent === "START GAME") {
+        startButton.textContent = "PLAY AGAIN";
+    }
 }
 
 function update() {
@@ -258,7 +261,7 @@ function spawnWord() {
     
     currentWord = newWord;  // Update the current word
     previousWord = currentWord;  // Store the current word as the previous word
-
+    wordInput.placeholder = currentWord;
     wordDisplay.innerText = `Type the word: ${currentWord}`;
     wordInput.value = "";
     typedWordDisplay.innerHTML = "";
@@ -267,19 +270,23 @@ function spawnWord() {
 
 function handleTyping() {
     const typedWord = wordInput.value;
-    let formattedText = "";
-
-    for (let i = 0; i < typedWord.length; i++) {
-        if (i < currentWord.length) {
-            if (typedWord[i] === currentWord[i]) {
-                formattedText += `<span class="correct-letter">${typedWord[i]}</span>`;
-            } else {
-                formattedText += `<span class="incorrect-letter">${typedWord[i]}</span>`;
-            }
-        }
+    
+    if (typedWord.length === 0) {
+        wordInput.classList.remove('correct', 'incorrect');
+        return;
     }
-    typedWordDisplay.innerHTML = formattedText;
-
+    
+    // Check if the typed text matches the current word so far
+    const isCorrectSoFar = typedWord === currentWord.substring(0, typedWord.length);
+    
+    // Update input field color
+    if (isCorrectSoFar) {
+        wordInput.classList.add('correct');
+        wordInput.classList.remove('incorrect');
+    } else {
+        wordInput.classList.add('incorrect');
+        wordInput.classList.remove('correct');
+    }
     if (typedWord === currentWord) {
         score += 50;
         readyToJump = true;
@@ -312,10 +319,11 @@ function detectCollision(a, b) {
 
 function endGame() {
     gameOver = true;
-    wordDisplay.innerText = "Game Over! Click 'Start Game' to play again.";
+    wordDisplay.innerText = "Game Over!";
     wordInput.disabled = true;
     typedWordDisplay.innerHTML = "";
     startButton.style.display = "block";
+    difficultySelect.style.display = "block";
     difficultySelect.disabled = false;
 
     // Stop the animation loop
