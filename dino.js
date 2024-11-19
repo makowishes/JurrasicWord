@@ -151,7 +151,7 @@ const difficultySettings = {
     },
     extreme: {
         speed: -15.5,
-        jumpVelocity: -12,     // Easier jump timing
+        jumpVelocity: -11.5,     // Easier jump timing
         spawnInterval: 1500,
         jumpThreshold: 220   // Stricter distance for jump timing
     }
@@ -215,7 +215,7 @@ function startGame() {
     } else if (currentDifficulty === 'hard') {
         backgroundMusic = new Audio('./assets/music/theme3.mp3');
     }else if (currentDifficulty === 'extreme') {
-        backgroundMusic = new Audio('./assets/music/theme4.mp3');
+        backgroundMusic = new Audio('./assets/music/theme4-200bpm.mp3');
     }
 
     // Configure and play the music
