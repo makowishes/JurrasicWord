@@ -1,30 +1,163 @@
 body {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Press Start 2P', cursive;
     text-align: center;
+    background: linear-gradient(#99c7e2, #689580);
+    background-attachment: fixed;
+    color: #333;
 }
 
 #board {
-    background-color: lightgray;
-    border: 1px solid black;
-    margin-bottom: 10px;
-    width: 750px;
-    height: 250px;
+    background-image: url('assets/background.png');
+    background-size: cover;    
+    border: 3px solid #333;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1000px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-image 0.3s ease-in-out;
 }
 
-#word-display, #typed-word-display {
-    font-size: 20px;
+#game-ui {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#word-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+#word-prompt {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+}
+
+#word-display {
+    font-size: 24px;
+    letter-spacing: 3px;
     margin-bottom: 10px;
+    color: #2c3e50;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+#typed-word-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-size: 24px;
+    letter-spacing: 3px;
+    z-index: 2;
+}
+
+/* Add these new classes for word coloring */
+.correct-word {
+    color: black;
+}
+
+.incorrect-word {
+    color: red;
+}
+
+#controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.retro-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid #2171c7;
+    border-radius: 5px;
+    box-shadow: 0 4px 0 #2171c7;
+}
+
+.retro-button:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #2171c7;
+}
+
+.retro-button:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+#difficulty-select {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    padding: 8px 16px;
+    border: 3px solid #333;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+
+#difficulty-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 20px auto;
+    max-width: 750px;
+    width: 100%;
 }
 
 #word-input {
-    font-size: 18px;
-    padding: 5px;
+    font-family: 'Press Start 2P', cursive;
+    padding-left: 15px;
+    padding: 13px;
+    width: 80%;
+    max-width: 400px;
+    border: 3px solid #333;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 20px;
+    transition: color 0.2s ease;
 }
 
-.correct-letter {
+/* Style for when input matches the word */
+#word-input.correct {
     color: green;
 }
 
-.incorrect-letter {
+/* Style for when input doesn't match the word */
+#word-input.incorrect {
     color: red;
+}
+
+/* Optional: Style for when input is disabled */
+#word-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#controls-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#difficulty-select, #play-again {
+    padding: 7px;
+    font-size: 14px;
 }
