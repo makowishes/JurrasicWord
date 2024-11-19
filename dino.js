@@ -212,8 +212,10 @@ function startGame() {
         backgroundMusic = new Audio('./assets/music/theme1.mp3');
     } else if (currentDifficulty === 'medium') {
         backgroundMusic = new Audio('./assets/music/theme2.mp3');
-    } else if (currentDifficulty === 'hard' || currentDifficulty === 'extreme') {
+    } else if (currentDifficulty === 'hard') {
         backgroundMusic = new Audio('./assets/music/theme3.mp3');
+    }else if (currentDifficulty === 'extreme') {
+        backgroundMusic = new Audio('./assets/music/theme4.mp3');
     }
 
     // Configure and play the music
